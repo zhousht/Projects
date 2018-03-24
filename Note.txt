@@ -1,0 +1,11 @@
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=aspnet-OrderMng-2B7D2693-DE9F-4444-996B-684F81954AFE;Trusted_Connection=True;MultipleActiveResultSets=true"
+
+Integrated Security=SSPI;Persist Security Info=False;Initial Catalog=YourDatabaseName;Data Source=YourServerName
+
+Did you created database using migrations?
+If not, open package manager console in VS(Tools -> NuGet Package Manager -> Package Manager Console)
+In command line you have to enable migrations with command.
+Enable-Migrations -EnableAutomaticMigrations
+after that run command
+Update-Database
+and start project.
