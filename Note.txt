@@ -9,3 +9,10 @@ Enable-Migrations -EnableAutomaticMigrations
 after that run command
 Update-Database
 and start project.
+
+
+https://benjii.me/2017/05/enable-entity-framework-core-migrations-visual-studio-2017/
+
+Install-Package Microsoft.EntityFrameworkCore.SqlServer
+Install-Package Microsoft.EntityFrameworkCore.Tools
+Install-Package Microsoft.VisualStudio.Web.CodeGeneration.Design

@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OrderMng.Data;
 using OrderMng.Models;
 using OrderMng.Services;
+using OrderDAL;
 
 namespace OrderMng
 {
@@ -27,6 +28,9 @@ namespace OrderMng
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<ModelDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
