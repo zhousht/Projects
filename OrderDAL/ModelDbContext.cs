@@ -133,6 +133,7 @@ namespace OrderDAL
         [Required]
         public decimal Price { get; set; }
 
+        [DisplayName("Category")]
         public int CategoryId { get; set; }
 
         [Required]
