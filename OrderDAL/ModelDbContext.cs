@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,17 +48,6 @@ namespace OrderDAL
         [DisplayName("Last Name")]
         public string LastName { get; set; }
 
-        [StringLength(20, MinimumLength = 2)]
-        [DisplayName("Phone Number")]
-        [DataType(DataType.PhoneNumber)]
-        [RegularExpression(@"^[0-9]{0,15}$", ErrorMessage = "PhoneNumber should contain only numbers")]
-        public string PhoneNumber { get; set; }
-
-        [Required]
-        [StringLength(50, MinimumLength = 2)]
-        [RegularExpression(@"^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$", ErrorMessage = "Email is not in proper format")]
-        public string Email { get; set; }
-
         [StringLength(100, MinimumLength = 2)]
         public string Address { get; set; }
 
@@ -69,6 +59,11 @@ namespace OrderDAL
 
         [StringLength(20, MinimumLength = 2)]
         public string Country { get; set; }
+
+        [Required]
+        [StringLength(450)]
+        [HiddenInput(DisplayValue = false)]
+        public string UserId { get; set; }
 
         public List<Order> Orders { get; set; }
     }
@@ -92,6 +87,7 @@ namespace OrderDAL
 
         [Required]
         [StringLength(20, MinimumLength = 2)]
+        [DisplayName("State / Province")]
         public string State { get; set; }
 
         [Required]

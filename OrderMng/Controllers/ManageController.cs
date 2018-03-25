@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using OrderDAL;
 using OrderMng.Models;
 using OrderMng.Models.ManageViewModels;
 using OrderMng.Services;
@@ -29,18 +30,22 @@ namespace OrderMng.Controllers
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
 
+        private ModelDbContext _contextModel;
+
         public ManageController(
           UserManager<ApplicationUser> userManager,
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          ModelDbContext contextModel)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _contextModel = contextModel;
         }
 
         [TempData]
@@ -539,6 +544,69 @@ namespace OrderMng.Controllers
             model.SharedKey = FormatKey(unformattedKey);
             model.AuthenticatorUri = GenerateQrCodeUri(user.Email, unformattedKey);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Shipping()
+        {
+            ViewBag.StatusMessage = "";
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            string userId = user.Id;
+
+            Customer customer = _contextModel.Customers.SingleOrDefault<Customer>(m => m.UserId == user.Id);
+
+            if (customer == null)
+            {
+                Customer newCustomer = new Customer();
+                newCustomer.UserId = userId;
+                return View(newCustomer);
+            }
+            else
+            {
+                return View(customer);
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Shipping(Customer model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            if(model.CustomerId == 0)
+            {
+                _contextModel.Add(model);
+                await _contextModel.SaveChangesAsync();
+            }
+            else
+            {
+                _contextModel.Update(model);
+                await _contextModel.SaveChangesAsync();
+            }
+
+            Customer customer = _contextModel.Customers.SingleOrDefault<Customer>(m => m.UserId == model.UserId);
+            if (customer == null)
+            {
+                throw new ApplicationException($"Unable to load customer.");
+            }
+
+
+            _logger.LogInformation("Shipping information changed successfully.");
+            StatusMessage = "Your shipping has been changed.";
+            ViewBag.StatusMessage = StatusMessage;
+
+            return View(customer);
+        }
+
 
         #endregion
     }

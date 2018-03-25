@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace OrderDAL.Migrations
 {
-    public partial class initalDAL : Migration
+    public partial class initialDAL : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,11 +31,10 @@ namespace OrderDAL.Migrations
                     Address = table.Column<string>(maxLength: 100, nullable: true),
                     City = table.Column<string>(maxLength: 20, nullable: true),
                     Country = table.Column<string>(maxLength: 20, nullable: true),
-                    Email = table.Column<string>(maxLength: 50, nullable: false),
                     FirstName = table.Column<string>(maxLength: 20, nullable: false),
                     LastName = table.Column<string>(maxLength: 20, nullable: false),
-                    PhoneNumber = table.Column<string>(maxLength: 20, nullable: true),
-                    State = table.Column<string>(maxLength: 20, nullable: true)
+                    State = table.Column<string>(maxLength: 20, nullable: true),
+                    UserId = table.Column<string>(maxLength: 450, nullable: false)
                 },
                 constraints: table =>
                 {

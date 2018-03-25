@@ -15,6 +15,8 @@ namespace OrderMng.Views.Manage
 
         public static string ChangePassword => "ChangePassword";
 
+        public static string Shipping => "Shipping";
+
         public static string ExternalLogins => "ExternalLogins";
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
@@ -22,6 +24,8 @@ namespace OrderMng.Views.Manage
         public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
+
+        public static string ShippingNavClass(ViewContext viewContext) => PageNavClass(viewContext, Shipping);
 
         public static string ExternalLoginsNavClass(ViewContext viewContext) => PageNavClass(viewContext, ExternalLogins);
 

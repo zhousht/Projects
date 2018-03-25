@@ -48,10 +48,6 @@ namespace OrderDAL.Migrations
                     b.Property<string>("Country")
                         .HasMaxLength(20);
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(20);
@@ -60,11 +56,12 @@ namespace OrderDAL.Migrations
                         .IsRequired()
                         .HasMaxLength(20);
 
-                    b.Property<string>("PhoneNumber")
-                        .HasMaxLength(20);
-
                     b.Property<string>("State")
                         .HasMaxLength(20);
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(450);
 
                     b.HasKey("CustomerId");
 
