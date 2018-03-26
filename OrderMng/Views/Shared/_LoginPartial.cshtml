@@ -9,6 +9,13 @@
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
             <li>
+                <p>
+                    <button type="button" class="btn btn-default btn-sm">
+                        <span class="glyphicon glyphicon-shopping-cart"></span> {{total}} itmes
+                    </button>
+                </p>
+            </li>
+            <li>
                 <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
             </li>
             <li>
@@ -24,3 +31,15 @@ else
         <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
     </ul>
 }
+<script>
+    angular.module('myApp', [])
+        .controller('myCtrl', ['$scope', function ($scope) {
+            $scope.temp = 0;
+            for (var key in sessionStorage) {
+                if (!!sessionStorage.getItem(key)) {
+                    $scope.temp = parseInt($scope.temp) + parseInt(sessionStorage.getItem(key));
+                }
+            }
+            $scope.total = $scope.temp;
+        }]);
+</script>

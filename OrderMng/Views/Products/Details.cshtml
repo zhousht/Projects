@@ -40,3 +40,51 @@
     <a asp-action="Edit" asp-route-id="@Model.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<div>
+    <div>
+        Order:
+        <button ng-click="count = count - 1" ng-init="count=1">
+            -
+        </button>
+        {{count}}
+        <button ng-click="count = count + 1">
+            +
+        </button>
+        Amount: ${{count * @Model.Price}}
+        <span>
+            <button ng-click="addToCard()">Add To Cart</button>
+        </span>
+    </div>
+<script>
+    angular.module('myApp', [])
+        .controller('myCtrl', ['$scope', function ($scope) {
+            $scope.temp = 0;
+            for (var key in sessionStorage) {
+                if (!!sessionStorage.getItem(key)) {
+                    $scope.temp = parseInt($scope.temp) + parseInt(sessionStorage.getItem(key));
+                }
+            }
+            $scope.total = $scope.temp;
+             $scope.count = 0;
+            $scope.addToCard = function () {
+                var ProductId = 'Product' + '@Model.ProductId';
+                var Count = $scope.count;
+                var SavedItem = sessionStorage.getItem(ProductId);
+                if (!SavedItem) { 
+                    SavedItem = 0;
+                }
+                SavedItem = parseInt(SavedItem) + parseInt($scope.count);
+                sessionStorage.setItem(ProductId, SavedItem);
+                $scope.temp = 0;
+                for (var key in sessionStorage) {
+                    if (!!sessionStorage.getItem(key)) {
+                        $scope.temp = parseInt($scope.temp) + parseInt(sessionStorage.getItem(key));
+                    }
+                }
+                $scope.total = $scope.temp;
+             };
+
+        }]);
+</script>
+</div>
