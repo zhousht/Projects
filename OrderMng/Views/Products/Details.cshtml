@@ -85,6 +85,11 @@
                 $scope.total = $scope.temp;
              };
 
+            $scope.cart = function () {
+                var data = JSON.stringify(sessionStorage);
+                var url = "/Products/GetShoppingCartList/" + data;
+                window.location = url;
+            };
         }]);
 </script>
 </div>

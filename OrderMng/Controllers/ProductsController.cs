@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using OrderDAL;
+using OrderMng.Models.ProductsViewModels;
 
 namespace OrderMng.Controllers
 {
@@ -159,6 +160,103 @@ namespace OrderMng.Controllers
         {
             return _context.Categories.ToList();
 
+        }
+
+        [HttpPost]
+        public ActionResult CheckoutShoppingCart(IEnumerable<OrderMng.Models.ProductsViewModels.ShoppingCartViewModel> id)
+        {
+            //List<ShoppingCartViewModel> list = ParseShoppingCartData(id);
+            return null;
+        }
+
+        [HttpGet]
+        public ActionResult GetShoppingCartList(string id)
+        {
+            List<ShoppingCartViewModel> list = ParseShoppingCartData(id);
+            return View(list);
+        }
+
+        private List<ShoppingCartViewModel> ParseShoppingCartData (string json)
+        {
+            var cart = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string,string>>(json);
+            List<int> proudctIds = GetProductIds(cart);
+            var products = _context.Products.Where(p=> proudctIds.Contains(p.ProductId)).ToList<Product>();
+            return GetShoppingCartList(cart, products);
+        }
+
+        private List<int> GetProductIds(Dictionary<string, string> list)
+        {
+            List<int> result = new List<int>();
+            int num;
+            foreach(string key in list.Keys)
+            {
+                num = GetProductIdFromKey(key);
+                result.Add(num);
+            }
+            return result;
+        }
+
+
+        private List<ShoppingCartViewModel> GetShoppingCartList(Dictionary<string, string> cart, List<Product> products)
+        {
+            ShoppingCartViewModel item = null;
+            Product product = null;
+            List<ShoppingCartViewModel> list = new List<ShoppingCartViewModel>();
+            foreach(string key in cart.Keys)
+            {
+                item = new ShoppingCartViewModel();
+                product = GetProductByKey(key, products);
+                if (product != null)
+                {
+                    item.ProductId = product.ProductId;
+                    item.ProductName = product.Name;
+                    item.Price = product.Price;
+                    item.Count = GetProductCount(key, cart);
+                    list.Add(item);
+                }
+            }
+
+            return list;
+        }
+
+        private int GetProductCount(string key, Dictionary<string, string> cart)
+        {
+            string str = cart[key];
+            int count = 0;
+            try
+            {
+                count = int.Parse(str);
+            }
+            catch (Exception) { }
+            return count;
+        }
+
+        private int GetProductIdFromKey(string key)
+        {
+            int id = 0;
+            try
+            {
+                key = key.ToLower();
+                if (key.StartsWith("product"))
+                {
+                    id=int.Parse(key.Substring(7));
+                }
+            }
+            catch (Exception) { }
+            return id;
+        }
+
+        private Product GetProductByKey(string key, List<Product> products)
+        {
+            int id = GetProductIdFromKey(key);
+            foreach(Product p in products)
+            {
+                if(p.ProductId == id)
+                {
+                    return p;
+                }
+            }
+            return null;
         }
     }
 }

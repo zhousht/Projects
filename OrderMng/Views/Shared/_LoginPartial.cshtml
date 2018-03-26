@@ -10,7 +10,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
                 <p>
-                    <button type="button" class="btn btn-default btn-sm">
+                    <button type="button" class="btn btn-default btn-sm"  ng-click="cart()">
                         <span class="glyphicon glyphicon-shopping-cart"></span> {{total}} itmes
                     </button>
                 </p>
@@ -41,5 +41,13 @@ else
                 }
             }
             $scope.total = $scope.temp;
+
+            $scope.cart = function () {
+                alert(1);
+                var data = JSON.stringify(sessionStorage);
+                var url = "/Products/GetShoppingCartList/" + data;
+                window.location = url;
+             };
+
         }]);
 </script>
